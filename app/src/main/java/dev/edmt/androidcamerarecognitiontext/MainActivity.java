@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                     {
                         textView.post(new Runnable() {
                             Boolean flag = false;
+                            Boolean dateFound = false;
                             @Override
                             public void run() {
                                 String t = "";
@@ -147,8 +148,11 @@ public class MainActivity extends AppCompatActivity {
                                     matcher1 = pattern.matcher(item.getValue());
                                     matcher2 = pattern2.matcher(item.getValue());
                                     matcher3 = pattern3.matcher(item.getValue());
-                                    if(matcher3.find())
-                                        flag = date.substring(4,9).equals(matcher3.group());
+                                    if(matcher3.find()){
+                                        String in = matcher3.group();
+                                        flag = date.substring(4,9).equals(in);
+                                        dateFound = !in.isEmpty();
+                                    }
                                     if(matcher2.find()){
                                         t = matcher2.group();
                                         break;
@@ -160,21 +164,24 @@ public class MainActivity extends AppCompatActivity {
                                     textView.setText("發票號碼 : ");
                                     textView2.setText("");
                                 }
-                                for (int i = 2; i < t.length(); i++) {
+                                for (int i = 2; i < t.length(); i++)
                                     tmp+=t.charAt(i);
-                                }
-
-                                    t = tmp;
-                                    tmp = c.check(tmp);
-                                if(flag){
-                                    textView2.setTextSize(36);
-                                    t = "發票號碼 : "+t +(tmp.compareTo("請對齊發票")==0?tmp:"");
+                                t = tmp;
+                                tmp = c.check(tmp);
+                                if(dateFound){
+                                    if(flag){
+                                        textView2.setTextSize(36);
+                                        t = "發票號碼 : "+t +(tmp.compareTo("請對齊發票")==0?tmp:"");
+                                        textView.setText(t);
+                                        textView2.setText((tmp.compareTo("請對齊發票")==0?"":tmp));
+                                    }else if((tmp.compareTo("請對齊發票")!=0)){
+                                        String warningMessage = "這不是本月份發票哦!";
+                                        textView2.setTextSize(22);
+                                        textView2.setText(warningMessage);
+                                    }
+                                }else {
+                                    t = "發票號碼 : 請對齊發票";
                                     textView.setText(t);
-                                    textView2.setText((tmp.compareTo("請對齊發票")==0?"":tmp));
-                                }else if((tmp.compareTo("請對齊發票")!=0)){
-                                    String warningMessage = "這不是"+date.substring(4)+"發票哦!";
-                                    textView2.setTextSize(22);
-                                    textView2.setText(warningMessage);
                                 }
                             }
                         });

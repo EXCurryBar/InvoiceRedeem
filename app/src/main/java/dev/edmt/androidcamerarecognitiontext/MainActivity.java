@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     Boolean flag = false;
     SurfaceView cameraView;
     public static TextView textView;
+    public static TextView textView2;
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
     Pattern pattern = Pattern.compile("[A-Z]{2}-[0-9]{8}");
@@ -62,9 +63,21 @@ public class MainActivity extends AppCompatActivity {
 
         cameraView = (SurfaceView) findViewById(R.id.surface_view);
         textView = (TextView) findViewById(R.id.text_view);
+        textView2 = (TextView)findViewById(R.id.textView2);
 
 
-        //craw();
+
+        final cr c = new cr();
+        c.start();
+        try{
+            c.join();
+        }catch (InterruptedException e){
+            debugMessage+=e.toString()+"\n";
+            textView.setText(debugMessage);
+        }
+
+
+
 
         final TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
         if (!textRecognizer.isOperational()) {
@@ -138,18 +151,12 @@ public class MainActivity extends AppCompatActivity {
                                 for (int i = 2; i < t.length(); i++) {
                                     tmp+=t.charAt(i);
                                 }
-                                final cr c = new cr();
-                                c.start();
-                                try{
-                                    c.join();
-                                }catch (InterruptedException e){
-                                    debugMessage+=e.toString()+"\n";
-                                    textView.setText(debugMessage);
-                                }
+
                                 t = tmp;
                                 tmp = c.check(tmp);
-                                t = "發票號碼:"+t + "\n"+tmp;
+                                t = "發票號碼 : "+t +(tmp.compareTo("請對齊發票")==0?tmp:"");
                                 textView.setText(t);
+                                textView2.setText((tmp.compareTo("請對齊發票")==0?"":tmp));
                             }
                         });
                     }

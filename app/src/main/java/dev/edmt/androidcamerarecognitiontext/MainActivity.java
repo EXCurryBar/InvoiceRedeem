@@ -11,6 +11,8 @@ import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.regex.Matcher;
@@ -24,18 +26,20 @@ import java.net.URL;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
-    Boolean flag = false;
     SurfaceView cameraView;
     public static TextView textView;
     public static TextView textView2;
+    public static TextView textView3;
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
     Pattern pattern = Pattern.compile("[A-Z]{2}-[0-9]{8}");
     Pattern pattern2 = Pattern.compile("\\D{2}[0-9]{8}");
-    Matcher matcher1 ,matcher2;
+    Pattern pattern3 = Pattern.compile("\\d{2}-\\d{2}");
+    Matcher matcher1, matcher2, matcher3;
     public static String[] EightNum = new String[5];
     public static String[] ThreeNum = new String[6];
     public static String debugMessage = "";
+    public static String date = "";
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         cameraView = (SurfaceView) findViewById(R.id.surface_view);
         textView = (TextView) findViewById(R.id.text_view);
         textView2 = (TextView)findViewById(R.id.textView2);
-
+        textView3 = (TextView)findViewById(R.id.textView3);
 
 
         final cr c = new cr();
@@ -75,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             debugMessage+=e.toString()+"\n";
             textView.setText(debugMessage);
         }
-
+        textView3.setText(date.isEmpty()?"":date);
 
 
 
@@ -127,10 +131,12 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void receiveDetections(Detector.Detections<TextBlock> detections) {
+
                     final SparseArray<TextBlock> items = detections.getDetectedItems();
                     if(items.size() != 0)
                     {
                         textView.post(new Runnable() {
+                            Boolean flag = false;
                             @Override
                             public void run() {
                                 String t = "";
@@ -138,25 +144,38 @@ public class MainActivity extends AppCompatActivity {
                                 for(int i =0;i<items.size();++i)
                                 {
                                     TextBlock item = items.valueAt(i);
-                                    matcher1 = pattern.matcher(item.getValue().replaceAll(" ",""));
-                                    matcher2 = pattern2.matcher(item.getValue().replaceAll(" ",""));
+                                    matcher1 = pattern.matcher(item.getValue());
+                                    matcher2 = pattern2.matcher(item.getValue());
+                                    matcher3 = pattern3.matcher(item.getValue());
+                                    if(matcher3.find())
+                                        flag = date.substring(4,9).equals(matcher3.group());
                                     if(matcher2.find()){
                                         t = matcher2.group();
                                         break;
                                     }
                                     else if(matcher1.find()){
                                         t = matcher1.group();
+                                        break;
                                     }
+                                    textView.setText("發票號碼 : ");
+                                    textView2.setText("");
                                 }
                                 for (int i = 2; i < t.length(); i++) {
                                     tmp+=t.charAt(i);
                                 }
 
-                                t = tmp;
-                                tmp = c.check(tmp);
-                                t = "發票號碼 : "+t +(tmp.compareTo("請對齊發票")==0?tmp:"");
-                                textView.setText(t);
-                                textView2.setText((tmp.compareTo("請對齊發票")==0?"":tmp));
+                                    t = tmp;
+                                    tmp = c.check(tmp);
+                                if(flag){
+                                    textView2.setTextSize(36);
+                                    t = "發票號碼 : "+t +(tmp.compareTo("請對齊發票")==0?tmp:"");
+                                    textView.setText(t);
+                                    textView2.setText((tmp.compareTo("請對齊發票")==0?"":tmp));
+                                }else if((tmp.compareTo("請對齊發票")!=0)){
+                                    String warningMessage = "這不是"+date.substring(4)+"發票哦!";
+                                    textView2.setTextSize(22);
+                                    textView2.setText(warningMessage);
+                                }
                             }
                         });
                     }
@@ -168,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
 class cr extends Thread {
     Pattern p1 = Pattern.compile("\\d{8}");
     Pattern p2 = Pattern.compile("\\d{3}");
+    Pattern p3 = Pattern.compile("\\d{3}年\\d{2}-\\d{2}月");
     String r;
     public cr() {}
     public void run() {
@@ -199,11 +219,11 @@ class cr extends Thread {
                         MainActivity.ThreeNum[i] = MainActivity.EightNum[g].substring(5);
                         ++g;
                     }
-                    // ==========================================================================
-                    // =============================CODE HERE====================================
+                    matcher = p3.matcher(r);
+                    if(matcher.find())
+                        MainActivity.date = matcher.group();
                 }
             } else {
-                //System.out.println("伺服器響應代碼為：" + responseCode);
                 MainActivity.debugMessage+="伺服器響應代碼為：" + responseCode+"\n";
             }
         } catch (Exception e) {

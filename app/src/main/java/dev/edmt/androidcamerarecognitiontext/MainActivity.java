@@ -168,21 +168,26 @@ public class MainActivity extends AppCompatActivity {
                                     tmp+=t.charAt(i);
                                 t = tmp;
                                 tmp = c.check(tmp);
-                                if(dateFound){
-                                    if(flag){
-                                        textView2.setTextSize(36);
-                                        t = "發票號碼 : "+t +(tmp.compareTo("請對齊發票")==0?tmp:"");
+                                if(debugMessage.isEmpty()){
+                                    if(dateFound){
+                                        if(flag){
+                                            textView2.setTextSize(36);
+                                            t = "發票號碼 : "+t +(tmp.compareTo("請對齊發票")==0?tmp:"");
+                                            textView.setText(t);
+                                            textView2.setText((tmp.compareTo("請對齊發票")==0?"":tmp));
+                                        }else if((tmp.compareTo("請對齊發票")!=0)){
+                                            String warningMessage = "這不是本月份發票哦!";
+                                            textView2.setTextSize(22);
+                                            textView2.setText(warningMessage);
+                                        }
+                                    }else {
+                                        t = "發票號碼 : 請對齊發票";
                                         textView.setText(t);
-                                        textView2.setText((tmp.compareTo("請對齊發票")==0?"":tmp));
-                                    }else if((tmp.compareTo("請對齊發票")!=0)){
-                                        String warningMessage = "這不是本月份發票哦!";
-                                        textView2.setTextSize(22);
-                                        textView2.setText(warningMessage);
                                     }
-                                }else {
-                                    t = "發票號碼 : 請對齊發票";
-                                    textView.setText(t);
+                                }else{
+                                    textView.setText("請檢查網路連線");
                                 }
+
                             }
                         });
                     }

@@ -13,42 +13,48 @@
   <SurfaceView
       android:id="@+id/surface_view"
 
-      android:layout_width="373dp"
-      android:layout_height="373dp" />
+      android:layout_width="380dp"
+      android:layout_height="461dp" />
 
-  <TextView
-      android:id="@+id/text_view"
-      android:layout_width="371dp"
-      android:layout_height="wrap_content"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentBottom="true"
-      android:layout_marginEnd="-120dp"
-      android:layout_marginBottom="108dp"
-      android:text="發票號碼 :"
-      android:textColor="#050505"
-      android:textSize="20sp" />
+    <TextView
+        android:id="@+id/text_view"
+        android:layout_width="339dp"
+        android:layout_height="38dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginBottom="121dp"
+        android:text="發票號碼 :"
+        android:textColor="#050505"
+        android:textSize="20sp" />
 
-  <TextView
-      android:id="@+id/textView2"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentBottom="true"
-      android:layout_marginEnd="107dp"
-      android:layout_marginBottom="20dp"
-      android:textColor="#FF0000"
-      android:textSize="36sp"
-      android:textStyle="bold" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="339dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="34dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="47dp"
+        android:textColor="#FF0000"
+        android:textSize="36sp"
+        android:textStyle="bold" />
 
-  <TextView
-      android:id="@+id/textView3"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentBottom="true"
-      android:layout_marginEnd="100dp"
-      android:layout_marginBottom="140dp"
-      android:textColor="#000000"
-      android:textSize="18sp" />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="266dp"
+        android:layout_height="42dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="85dp"
+        android:layout_marginEnd="76dp"
+        android:layout_marginBottom="167dp"
+        android:textColor="#000000"
+        android:textSize="18sp" />
 
 </RelativeLayout>

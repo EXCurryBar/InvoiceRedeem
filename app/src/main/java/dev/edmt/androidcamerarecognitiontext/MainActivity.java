@@ -142,33 +142,33 @@ public class MainActivity extends AppCompatActivity {
                             public void run() {
                                 String t = "";
                                 String tmp = "";
-                                for(int i =0;i<items.size();++i)
-                                {
-                                    TextBlock item = items.valueAt(i);
-                                    matcher1 = pattern.matcher(item.getValue());
-                                    matcher2 = pattern2.matcher(item.getValue());
-                                    matcher3 = pattern3.matcher(item.getValue());
-                                    if(matcher3.find()){
-                                        String in = matcher3.group();
-                                        flag = date.substring(4,9).equals(in);
-                                        dateFound = !in.isEmpty();
-                                    }
-                                    if(matcher2.find()){
-                                        t = matcher2.group();
-                                        break;
-                                    }
-                                    else if(matcher1.find()){
-                                        t = matcher1.group();
-                                        break;
-                                    }
-                                    textView.setText("發票號碼 : ");
-                                    textView2.setText("");
-                                }
-                                for (int i = 2; i < t.length(); i++)
-                                    tmp+=t.charAt(i);
-                                t = tmp;
-                                tmp = c.check(tmp);
                                 if(debugMessage.isEmpty()){
+                                    for(int i =0;i<items.size();++i)
+                                    {
+                                        TextBlock item = items.valueAt(i);
+                                        matcher1 = pattern.matcher(item.getValue());
+                                        matcher2 = pattern2.matcher(item.getValue());
+                                        matcher3 = pattern3.matcher(item.getValue());
+                                        if(matcher3.find()){
+                                            String in = matcher3.group();
+                                            flag = date.substring(4,9).equals(in);
+                                            dateFound = !in.isEmpty();
+                                        }
+                                        if(matcher2.find()){
+                                            t = matcher2.group();
+                                            break;
+                                        }
+                                        else if(matcher1.find()){
+                                            t = matcher1.group();
+                                            break;
+                                        }
+                                        textView.setText("發票號碼 : ");
+                                        textView2.setText("");
+                                    }
+                                    for (int i = 2; i < t.length(); i++)
+                                        tmp+=t.charAt(i);
+                                    t = tmp;
+                                    tmp = c.check(tmp);
                                     if(dateFound){
                                         if(flag){
                                             textView2.setTextSize(36);
@@ -185,9 +185,8 @@ public class MainActivity extends AppCompatActivity {
                                         textView.setText(t);
                                     }
                                 }else{
-                                    textView.setText("請檢查網路連線");
+                                    textView.setText("請檢查網路連線並重啟程式");
                                 }
-
                             }
                         });
                     }
@@ -239,7 +238,7 @@ class cr extends Thread {
                 MainActivity.debugMessage+="伺服器響應代碼為：" + responseCode+"\n";
             }
         } catch (Exception e) {
-            System.out.println("獲取不到網頁源碼：" + e);
+            //System.out.println("獲取不到網頁源碼：" + e);
             MainActivity.debugMessage+=e.toString()+"\n";
         }
     }

@@ -197,9 +197,10 @@ public class MainActivity extends AppCompatActivity {
 }
 class cr extends Thread {
     Pattern p1 = Pattern.compile("\\d{8}");
-    Pattern p2 = Pattern.compile("\\d{3}");
+    Pattern p2 = Pattern.compile("<span id=\"newAddSixPrize\" class=\"t18Red\">.*</span>");
     Pattern p3 = Pattern.compile("\\d{3}年\\d{2}-\\d{2}月");
-    String r;
+    String r, tmp;
+    int check;
     public cr() {}
     public void run() {
         try {
@@ -217,16 +218,16 @@ class cr extends Thread {
                         ++g;
                     }
                     matcher = p2.matcher(r);
-                    g = 0;
-                    while (matcher.find() && g < 19) {
-                        if (g > 15) {
-                            System.out.println(matcher.group());
-                            MainActivity.ThreeNum[g - 16] = matcher.group();
-                        }
-                        ++g;
+                    if(matcher.find())
+                        tmp = matcher.group();
+                    tmp = tmp.substring(41,52).replaceAll(" ", "");
+                    tmp = tmp.replaceAll("、", "");
+                    for (int i = 0; i < tmp.length()/3; i++){
+                        MainActivity.ThreeNum[i] = tmp.substring(i*3,i*3+3);
+                        check = i;
                     }
                     g = 2;
-                    for (int i = 3; i < MainActivity.ThreeNum.length; i++) {
+                    for (int i = check+1; i < MainActivity.ThreeNum.length; i++) {
                         MainActivity.ThreeNum[i] = MainActivity.EightNum[g].substring(5);
                         ++g;
                     }

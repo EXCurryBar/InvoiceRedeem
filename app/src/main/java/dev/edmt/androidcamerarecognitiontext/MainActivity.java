@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     final int RequestCameraPermissionID = 1001;
     Pattern pattern = Pattern.compile("[A-Z]{2}-[0-9]{8}");
     Pattern pattern2 = Pattern.compile("\\D{2}[0-9]{8}");
-    Pattern pattern3 = Pattern.compile("\\d{2}-\\d{2}");
+    Pattern pattern3 = Pattern.compile("\\d{2}-\\d{2}[^-| ]");
     Matcher matcher1, matcher2, matcher3;
     public static String[] EightNum = new String[5];
     public static String[] ThreeNum = new String[6];
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                                         matcher2 = pattern2.matcher(item.getValue());
                                         matcher3 = pattern3.matcher(item.getValue());
                                         if(matcher3.find()){
-                                            String in = matcher3.group();
+                                            String in = matcher3.group().substring(0,5);
                                             flag = date.substring(4,9).equals(in);
                                             dateFound = !in.isEmpty();
                                         }
@@ -222,6 +222,7 @@ class cr extends Thread {
                         tmp = matcher.group();
                     tmp = tmp.substring(41,52).replaceAll(" ", "");
                     tmp = tmp.replaceAll("、", "");
+                    tmp = tmp.replaceAll("</s", "");
                     for (int i = 0; i < tmp.length()/3; i++){
                         MainActivity.ThreeNum[i] = tmp.substring(i*3,i*3+3);
                         check = i;

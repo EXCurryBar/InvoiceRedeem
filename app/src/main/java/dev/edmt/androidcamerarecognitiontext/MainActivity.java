@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         textView3 = (TextView)findViewById(R.id.textView3);
         spinner = (Spinner)findViewById(R.id.spinner);
         Calendar calendar = Calendar.getInstance();
-        final int month = calendar.get(Calendar.MONTH);
+        final int month = calendar.get(Calendar.MONTH)+1;
         final int p =0;
 
         final cr c = new cr(month,p);
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             debugMessage+=e.toString()+"\n";
             textView.setText(debugMessage);
         }
-        textView3.setText(date.isEmpty()?"":date.substring(0,6)+"-"+date.substring(6));
+        //textView3.setText(date.isEmpty()?"":date.substring(0,6)+"-"+date.substring(6));
         String[] spList = {c.process(month,0),c.process(month,1)};
         final ArrayAdapter<String> adapter =new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spList);
         spinner.setAdapter(adapter);
@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                    ss.join();
                     textView3.setText(date.isEmpty()?"":date.substring(0,6)+"-"+date.substring(6));
                     Toast.makeText(MainActivity.this, "您選擇"+adapter.getItem(position), Toast.LENGTH_LONG).show();
+                    textView3.setText(date.isEmpty()?"":date.substring(0,6)+"-"+date.substring(6));
                 }catch (Exception e){
                     Toast.makeText(MainActivity.this,e.toString(),Toast.LENGTH_LONG).show();
                 }

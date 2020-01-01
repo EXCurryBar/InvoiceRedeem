@@ -82,22 +82,25 @@ public class cr extends Thread {
         Calendar calendar = Calendar.getInstance();
         int date = calendar.get(Calendar.DATE);
         String s = "";
-        if (position == 1) {
+        if (position == 1) {            //if >1/25   0910  else 0708    if>3/25  1112  else 0910
             if (m < 13 && m > 4) {
                 if (m % 2 == 0) {
                     s = String.format("%02d%02d", m - 5, m - 4);
+
                 } else {
                     if (date >= 25) {
                         s = String.format("%02d%02d", m - 4, m - 3);
                     }
                 }
-            } else if (m == 2 || m == 1) {
-                s = (date >= 25 || m == 2) ? "0910" : "";
+            }else if (m == 2 || m == 1) {
+                s = (date >= 25 || m == 2) ? "0910" : "0708";
+            }else if (m == 4 || m == 3) {
+                s = (date >= 25 || m == 4) ? "1112" : "0910";
             }
             return s;
         }
         else{
-            if (m < 13 && m > 4) {
+            if (m < 13 && m > 2) {
                 if (m % 2 == 0) {
                     s = String.format("%02d%02d", m - 3, m - 2);
                 } else {
@@ -113,6 +116,7 @@ public class cr extends Thread {
             } else if (m == 2 || m == 1) {
                 s = (date>=25||m==2)?"1112":"0910";
             }
+
             return s;
         }
     }

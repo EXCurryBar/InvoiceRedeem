@@ -2,8 +2,11 @@ package dev.edmt.androidcamerarecognitiontext;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     public static TextView textView2;
     public static TextView textView3;
     public static Spinner spinner;
+    public static Button btn_query;
+
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
     Pattern pattern2 = Pattern.compile("\\D{2}[-| ][0-9]{8}");
@@ -73,7 +79,13 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         final int month = calendar.get(Calendar.MONTH)+1;
         final int p =0;
-
+        btn_query = (Button) findViewById(R.id.btn_query);
+        btn_query.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(MainActivity.this, Main2Activity.class),1);
+            }
+        });
         final cr c = new cr(month,p);
         c.start();
         try{
@@ -82,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
             debugMessage+=e.toString()+"\n";
             textView.setText(debugMessage);
         }
-        //textView3.setText(date.isEmpty()?"":date.substring(0,6)+"-"+date.substring(6));
         String[] spList = {c.process(month,0),c.process(month,1)};
         final ArrayAdapter<String> adapter =new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spList);
         spinner.setAdapter(adapter);
@@ -189,11 +200,20 @@ public class MainActivity extends AppCompatActivity {
                                         for (int i = 2; i < t.length(); i++)
                                             tmp.append(t.charAt(i));
                                         t = tmp.toString();
+                                        String Inv = tmp.toString();
+                                        SQLiteDatabase dbrw = new MyDBHelper(MainActivity.this).getWritableDatabase();
+
                                         tmp = new StringBuilder(c.check(tmp.toString()));
+
+
                                         if(dateFound){
                                             if(flag){
                                                 textView2.setTextSize(36);
                                                 t = "發票號碼 : "+t +(tmp.toString().compareTo("請對齊發票")==0? tmp.toString() :"");
+                                                if(tmp.toString().compareTo("請對齊發票")!=0&&tmp.toString().compareTo("沒中獎")!=0) {
+                                                    add add = new add(Inv, date, tmp.toString(), dbrw);
+                                                    add.start();
+                                                }
                                                 textView.setText(t);
                                                 textView2.setText((tmp.toString().compareTo("請對齊發票")==0?"": tmp.toString()));
                                             }else if((tmp.toString().compareTo("請對齊發票")!=0)){
@@ -216,6 +236,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+    }
+    protected void onActivityResult(int requestCode, int resultCode,@Nullable Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data==null) return;
+        if(requestCode == 1){
+            if(resultCode == 101){
+
+            }
         }
     }
 }
